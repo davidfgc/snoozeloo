@@ -11,7 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.maxLength
+import androidx.compose.foundation.text.input.then
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
@@ -20,13 +26,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.solucionespruna.snoozeloo.R
@@ -43,12 +54,8 @@ fun AlarmDetailScreen(
     viewModel: AlarmViewModel = koinViewModel(),
     onClose: () -> Unit
 ) {
-    val timeFieldState by remember {
-        mutableStateOf(TextFieldState("10:20"))
-    }
-    val nameFieldState by remember {
-        mutableStateOf(TextFieldState("work"))
-    }
+    val timeFieldState by viewModel.timeFieldState.collectAsState()
+    val nameFieldState by viewModel.nameFieldState.collectAsState()
 
     AlarmDetailScaffold(timeFieldState, nameFieldState) {
         when(it) {
@@ -100,30 +107,12 @@ private fun AlarmDetailContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Card(onClick = { /*TODO*/ }) {
-            Column(modifier = Modifier
+            Box(modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(24.dp)
             ) {
-                BasicTextField(
-                    timeFieldState,
-                    decorator = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            AlarmDetailTextBox {
-                                AlarmDetailText(timeFieldState.text.substring(IntRange(0, 1)))
-                            }
-                            Box(
-                                modifier = Modifier.width(24.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                AlarmDetailText(text = ":")
-                            }
-                            AlarmDetailTextBox {
-                                AlarmDetailText(timeFieldState.text.substring(IntRange(3, 4)))
-                            }
-                        }
-                    }
-                )
+                SnoozelooAlarmTextField(timeFieldState)
             }
         }
         Card(onClick = { /*TODO*/ }) {
@@ -140,31 +129,6 @@ private fun AlarmDetailContent(
             }
         }
     }
-}
-
-@Composable
-fun RowScope.AlarmDetailTextBox(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    Box(modifier = modifier
-        .clip(RoundedCornerShape(10.dp))
-        .background(MaterialTheme.colorScheme.background)
-        .padding(16.dp)
-        .weight(1f),
-        contentAlignment = Alignment.Center
-    ) {
-        content()
-    }
-}
-
-@Composable
-private fun AlarmDetailText(text: String) {
-    Text(
-        text = text,
-        color = MaterialTheme.colorScheme.onSurface,
-        style = MaterialTheme.typography.displayLarge,
-    )
 }
 
 @Preview
