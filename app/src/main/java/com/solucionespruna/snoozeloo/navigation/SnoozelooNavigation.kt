@@ -1,6 +1,7 @@
 package com.solucionespruna.snoozeloo.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,7 +19,18 @@ fun SnoozelooNavigation() {
             }
         }
         composable("alarm-detail") {
-            AlarmDetailScreen()
+            AlarmDetailScreen {
+                navController.navigateTo("alarms-list")
+            }
+        }
+    }
+}
+
+private fun NavController.navigateTo(route: String) {
+    navigate(route) {
+        launchSingleTop = true
+        popUpTo(route) {
+            inclusive = true
         }
     }
 }
