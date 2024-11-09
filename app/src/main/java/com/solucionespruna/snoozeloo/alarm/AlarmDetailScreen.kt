@@ -36,9 +36,13 @@ import com.solucionespruna.snoozeloo.designsystem.SnoozelooButton
 import com.solucionespruna.snoozeloo.designsystem.SnoozelooIconButton
 import com.solucionespruna.snoozeloo.designsystem.SnoozelooTopBar
 import com.solucionespruna.snoozeloo.ui.theme.SnoozelooTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AlarmDetailScreen(onClose: () -> Unit) {
+fun AlarmDetailScreen(
+    viewModel: AlarmViewModel = koinViewModel(),
+    onClose: () -> Unit
+) {
     val timeFieldState by remember {
         mutableStateOf(TextFieldState("10:20"))
     }
