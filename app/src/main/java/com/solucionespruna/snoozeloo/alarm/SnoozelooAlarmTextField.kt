@@ -48,15 +48,18 @@ fun SnoozelooAlarmTextField(timeFieldState: TextFieldState, modifier: Modifier =
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.NumberPassword
         ),
-        decorator = { innerTextField ->
+        decorator = {
             var value = timeFieldState.text
             while (value.length < fieldLength) {
                 value = "0$value"
             }
+            val color =
+                if (value == "0000") MaterialTheme.colorScheme.onSurface
+                else MaterialTheme.colorScheme.primary
             Box {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AlarmDetailTextBox {
-                        AlarmDetailText(value.substring(IntRange(0, 1)))
+                        AlarmDetailText(value.substring(IntRange(0, 1)), color)
                     }
                     Box(
                         modifier = Modifier.width(24.dp),
@@ -65,7 +68,7 @@ fun SnoozelooAlarmTextField(timeFieldState: TextFieldState, modifier: Modifier =
                         AlarmDetailText(text = ":")
                     }
                     AlarmDetailTextBox {
-                        AlarmDetailText(value.substring(IntRange(2, 3)))
+                        AlarmDetailText(value.substring(IntRange(2, 3)), color)
                     }
                 }
             }
@@ -90,10 +93,10 @@ fun RowScope.AlarmDetailTextBox(
 }
 
 @Composable
-private fun AlarmDetailText(text: String) {
+private fun AlarmDetailText(text: String, color: Color = MaterialTheme.colorScheme.onSurface) {
     Text(
         text = text,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = color,
         style = MaterialTheme.typography.displayLarge,
     )
 }

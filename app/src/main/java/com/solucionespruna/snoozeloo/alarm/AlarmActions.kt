@@ -1,6 +1,8 @@
 package com.solucionespruna.snoozeloo.alarm
 
 sealed interface AlarmAction {
-    object Close: AlarmAction
-    object Save: AlarmAction
+    data object Close: AlarmAction
+    data object Save: AlarmAction
+    data object NameClicked : AlarmAction
+    data object Dismiss: AlarmAction
 }
