@@ -3,6 +3,7 @@ package com.solucionespruna.snoozeloo.alarm
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -38,6 +40,9 @@ fun AlarmNameDialog(
     nameFieldState: TextFieldState,
     onAction: (action: AlarmAction) -> Unit
 ) {
+    val newName by remember {
+        mutableStateOf(TextFieldState(nameFieldState.text.toString()))
+    }
     val focusRequester by remember {
         mutableStateOf(FocusRequester())
     }
@@ -50,6 +55,7 @@ fun AlarmNameDialog(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
+            .clickable { onAction(AlarmAction.Dismiss) }
             .padding(16.dp)
         ,
         contentAlignment = Alignment.Center
@@ -62,7 +68,7 @@ fun AlarmNameDialog(
             ) {
                 SnoozelooBodyTextLarge(text = stringResource(R.string.alarm_detail__alarm_name))
                 BasicTextField(
-                    state = nameFieldState,
+                    state = newName,
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(
@@ -75,6 +81,7 @@ fun AlarmNameDialog(
                     lineLimits = TextFieldLineLimits.SingleLine
                 )
                 SnoozelooButton(text = stringResource(R.string.common__save), Modifier.align(Alignment.End)) {
+                    nameFieldState.setTextAndPlaceCursorAtEnd(newName.text.toString())
                     onAction(AlarmAction.Dismiss)
                 }
             }
