@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -52,7 +51,6 @@ fun AlarmDetailScreen(
             is AlarmAction.Close -> onClose()
             is AlarmAction.NameClicked -> isNameDialogOpened = true
             is AlarmAction.Dismiss -> {
-                Log.d("DFG", "Dismiss..")
                 isNameDialogOpened = false
             }
             else -> TODO("not implemented")
@@ -68,7 +66,6 @@ private fun AlarmDetailScaffold(
     modifier: Modifier = Modifier,
     onAction: (action: AlarmAction) -> Unit,
 ) {
-    Log.d("DFG", "opened: $isNameDialogOpened")
     Scaffold(
         topBar = {
             SnoozelooTopBar(

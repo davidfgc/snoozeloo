@@ -16,8 +16,14 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +38,14 @@ fun AlarmNameDialog(
     nameFieldState: TextFieldState,
     onAction: (action: AlarmAction) -> Unit
 ) {
+    val focusRequester by remember {
+        mutableStateOf(FocusRequester())
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +69,8 @@ fun AlarmNameDialog(
                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant),
                             shape = RoundedCornerShape(4.dp)
                         )
-                        .padding(vertical = 10.dp, horizontal = 12.dp),
+                        .padding(vertical = 10.dp, horizontal = 12.dp)
+                        .focusRequester(focusRequester),
                     textStyle = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
                     lineLimits = TextFieldLineLimits.SingleLine
                 )
