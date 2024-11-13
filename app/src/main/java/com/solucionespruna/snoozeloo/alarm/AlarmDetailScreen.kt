@@ -1,6 +1,5 @@
 package com.solucionespruna.snoozeloo.alarm
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
@@ -16,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,13 +37,11 @@ fun AlarmDetailScreen(
     viewModel: AlarmViewModel = koinViewModel(),
     onClose: () -> Unit
 ) {
-    val timeFieldState by viewModel.timeFieldState.collectAsState()
-    val nameFieldState by viewModel.nameFieldState.collectAsState()
     var isNameDialogOpened by remember {
         mutableStateOf(false)
     }
 
-    AlarmDetailScaffold(timeFieldState, nameFieldState, isNameDialogOpened) {
+    AlarmDetailScaffold(viewModel.alarmDetailState, isNameDialogOpened) {
         when(it) {
             is AlarmAction.Close -> onClose()
             is AlarmAction.NameClicked -> isNameDialogOpened = true
@@ -60,8 +55,7 @@ fun AlarmDetailScreen(
 
 @Composable
 private fun AlarmDetailScaffold(
-    timeFieldState: TextFieldState,
-    nameFieldState: TextFieldState,
+    alarmDetailState: AlarmDetailState,
     isNameDialogOpened: Boolean,
     modifier: Modifier = Modifier,
     onAction: (action: AlarmAction) -> Unit,
@@ -75,7 +69,10 @@ private fun AlarmDetailScaffold(
                     }
                 },
                 endIcon = {
-                    SnoozelooButton(text = "Save", enabled = false) {
+                    SnoozelooButton(
+                        text = stringResource(id = R.string.common__save),
+                        enabled = alarmDetailState.isAlarmValid
+                    ) {
                         onAction(AlarmAction.Save)
                     }
                 }
@@ -83,21 +80,19 @@ private fun AlarmDetailScaffold(
         }
     ) { innerPadding ->
         AlarmDetailContent(
-            timeFieldState,
-            nameFieldState,
+            alarmDetailState,
             modifier.padding(innerPadding),
             onAction,
         )
         if (isNameDialogOpened) {
-            AlarmNameDialog(nameFieldState, onAction)
+            AlarmNameDialog(alarmDetailState.nameState, onAction)
         }
     }
 }
 
 @Composable
 private fun AlarmDetailContent(
-    timeFieldState: TextFieldState,
-    nameFieldState: TextFieldState,
+    alarmDetailState: AlarmDetailState,
     modifier: Modifier = Modifier,
     onAction: (AlarmAction) -> Unit
 ) {
@@ -111,7 +106,7 @@ private fun AlarmDetailContent(
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(24.dp)
             ) {
-                SnoozelooAlarmTextField(timeFieldState)
+                SnoozelooAlarmTextField(alarmDetailState.timeState)
             }
         }
         Card(onClick = { onAction(AlarmAction.NameClicked) }) {
@@ -124,7 +119,7 @@ private fun AlarmDetailContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SnoozelooBodyTextLarge(text = stringResource(R.string.alarm_detail__alarm_name))
-                SnoozelooBodyTextMedium(text = nameFieldState.text.toString())
+                SnoozelooBodyTextMedium(text = alarmDetailState.nameState.text.toString())
             }
         }
     }
@@ -133,16 +128,9 @@ private fun AlarmDetailContent(
 @Preview
 @Composable
 private fun AlarmDetailPreview() {
-    val timeFieldState by remember {
-        mutableStateOf(TextFieldState("10:20"))
-    }
-    val nameFieldState by remember {
-        mutableStateOf(TextFieldState("10:20"))
-    }
-
     SnoozelooTheme {
         Surface {
-            AlarmDetailScaffold(timeFieldState, nameFieldState, false) {}
+            AlarmDetailScaffold(AlarmDetailState(), false) {}
         }
     }
 }
