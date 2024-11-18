@@ -9,8 +9,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.solucionespruna.snoozeloo.ui.theme.SnoozelooTheme
 
@@ -19,11 +21,13 @@ fun SnoozelooButton(
     text: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onClick: () -> Unit
+    height: Dp = 32.dp,
+    textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
+    onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
-        modifier.height(32.dp),
+        modifier.height(height),
         enabled,
         colors = ButtonDefaults.buttonColors().copy(
             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -31,7 +35,7 @@ fun SnoozelooButton(
         ),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
     ) {
-        Text(text, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyLarge)
+        Text(text, fontWeight = FontWeight.SemiBold, style = textStyle)
     }
 }
 

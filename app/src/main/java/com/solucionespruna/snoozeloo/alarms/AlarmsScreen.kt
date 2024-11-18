@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solucionespruna.snoozeloo.R
 import com.solucionespruna.snoozeloo.alarm.Alarm
 import com.solucionespruna.snoozeloo.designsystem.SnoozelooFab
@@ -119,7 +118,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             tint = MaterialTheme.colorScheme.primary
         )
         Text(
-            stringResource(id = R.string.alarms_empty_state_text),
+            stringResource(id = R.string.alarms__empty_state_text),
             modifier = Modifier.padding(32.dp),
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Medium,
