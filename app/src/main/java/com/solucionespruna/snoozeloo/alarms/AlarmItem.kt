@@ -21,7 +21,11 @@ import com.solucionespruna.snoozeloo.ui.theme.SnoozelooTheme
 import java.util.Calendar
 
 @Composable
-fun AlarmItem(alarm: Alarm, modifier: Modifier = Modifier) {
+fun AlarmItem(
+    alarm: Alarm,
+    modifier: Modifier = Modifier,
+    onEnabledChange: (Boolean) -> Unit,
+) {
     val nextOccurrenceText = alarm.nextOccurrenceText()
 
     Card {
@@ -43,7 +47,7 @@ fun AlarmItem(alarm: Alarm, modifier: Modifier = Modifier) {
                 if (nextOccurrenceText.isNotBlank())
                     Text("Alarm in $nextOccurrenceText")
             }
-            Switch(alarm.enabled, onCheckedChange = {})
+            Switch(alarm.enabled, onCheckedChange = onEnabledChange)
         }
     }
 }
@@ -52,11 +56,11 @@ fun AlarmItem(alarm: Alarm, modifier: Modifier = Modifier) {
 @Composable
 private fun AlarmItemPreview() {
     val alarm = Alarm(
-        "Wake Up",
-        Calendar.getInstance().timeInMillis + 90 * 60 * 1000,
-        true
+        name = "Wake Up",
+        date = Calendar.getInstance().timeInMillis + 90 * 60 * 1000,
+        enabled = true
     )
     SnoozelooTheme {
-        AlarmItem(alarm)
+        AlarmItem(alarm) {}
     }
 }

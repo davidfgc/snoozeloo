@@ -27,4 +27,11 @@ class AlarmsViewModel(
             }
         }
     }
+
+    fun updateAlarm(alarm: Alarm) {
+        viewModelScope.launch(Dispatchers.IO) {
+            alarmRepository.saveAlarm(alarm)
+            initialize()
+        }
+    }
 }

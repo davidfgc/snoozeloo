@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solucionespruna.snoozeloo.R
 import com.solucionespruna.snoozeloo.alarm.Alarm
 import com.solucionespruna.snoozeloo.designsystem.SnoozelooFab
@@ -49,19 +51,24 @@ fun AlarmsScreen(
         }
     }
 
-    AlarmsScreen(alarms, modifier, onAddClicked)
+    AlarmsScreen(alarms, modifier) {
+        when (it) {
+            AlarmsAction.AddAlarm -> onAddClicked()
+            is AlarmsAction.UpdateAlarm -> alarmsViewModel.updateAlarm(it.alarm)
+        }
+    }
 }
 
 @Composable
 private fun AlarmsScreen(
     alarms: List<Alarm>,
     modifier: Modifier = Modifier,
-    onAddClicked: () -> Unit
+    onAction: (AlarmsAction) -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
             SnoozelooFab {
-                onAddClicked()
+                onAction(AlarmsAction.AddAlarm)
             }
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -69,7 +76,9 @@ private fun AlarmsScreen(
         Column(modifier.padding(innerPadding)) {
             SnoozelooScreenTitle(title = "Your Alarms")
             when {
-                alarms.isNotEmpty() -> AlarmsList(alarms)
+                alarms.isNotEmpty() -> AlarmsList(alarms) {
+                    onAction(AlarmsAction.UpdateAlarm(it))
+                }
                 else -> EmptyState()
             }
         }
@@ -77,13 +86,21 @@ private fun AlarmsScreen(
 }
 
 @Composable
-fun AlarmsList(alarms: List<Alarm>, modifier: Modifier = Modifier) {
+fun AlarmsList(
+    alarms: List<Alarm>,
+    modifier: Modifier = Modifier,
+    onAlarmEnabledChange: (Alarm) -> Unit,
+) {
     Column(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        alarms.forEach {
-            AlarmItem(it)
+        alarms.forEach { alarm ->
+            key(alarm.id) {
+                AlarmItem(alarm) {
+                    onAlarmEnabledChange(alarm.copy(enabled = it))
+                }
+            }
         }
     }
 }
@@ -126,11 +143,11 @@ private fun AlarmsScreenPreview() {
 @Composable
 fun AlarmListPreview(modifier: Modifier = Modifier) {
     val alarm = Alarm(
-        "Wake Up",
-        Calendar.getInstance().timeInMillis + 90 * 60 * 1000,
-        true
+        name = "Wake Up",
+        date = Calendar.getInstance().timeInMillis + 90 * 60 * 1000,
+        enabled = true
     )
     SnoozelooTheme {
-        AlarmsList(listOf(alarm))
+        AlarmsList(listOf(alarm)) {}
     }
 }

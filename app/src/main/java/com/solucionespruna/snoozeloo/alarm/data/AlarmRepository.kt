@@ -20,9 +20,10 @@ class AlarmRepositoryImpl(
     override fun getAlarms(): List<Alarm> {
         return alarmDao.getAlarms().map {
             Alarm(
+                it.id,
                 it.name,
                 it.date,
-                enabled = true,
+                it.enabled,
             )
         }
     }
