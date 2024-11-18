@@ -48,7 +48,7 @@ fun AlarmDetailScreen(
             is AlarmAction.Dismiss -> {
                 isNameDialogOpened = false
             }
-            else -> TODO("not implemented")
+            else -> viewModel.save()
         }
     }
 }

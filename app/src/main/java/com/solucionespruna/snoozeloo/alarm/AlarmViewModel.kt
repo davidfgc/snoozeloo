@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class AlarmViewModel: ViewModel() {
-
     var alarmDetailState by mutableStateOf(AlarmDetailState())
         private set
 
@@ -34,5 +33,9 @@ class AlarmViewModel: ViewModel() {
                 isAlarmValid = isTimeValid && alarmDetailState.isNameValid
             )
         }.launchIn(viewModelScope)
+    }
+
+    fun save() {
+
     }
 }
