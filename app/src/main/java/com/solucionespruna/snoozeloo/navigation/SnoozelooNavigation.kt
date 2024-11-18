@@ -30,7 +30,7 @@ private fun NavController.navigateTo(route: String) {
     navigate(route) {
         launchSingleTop = true
         popUpTo(route) {
-            inclusive = true
+            inclusive = false
         }
     }
 }

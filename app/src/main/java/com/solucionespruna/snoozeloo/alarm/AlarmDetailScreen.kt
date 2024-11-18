@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -13,7 +14,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,16 +43,41 @@ fun AlarmDetailScreen(
     var isNameDialogOpened by remember {
         mutableStateOf(false)
     }
+    val state by viewModel.alarmDetailUiState.collectAsState()
 
-    AlarmDetailScaffold(viewModel.alarmDetailState, isNameDialogOpened) {
-        when(it) {
-            is AlarmAction.Close -> onClose()
-            is AlarmAction.NameClicked -> isNameDialogOpened = true
-            is AlarmAction.Dismiss -> {
-                isNameDialogOpened = false
+    when (state) {
+        AlarmDetailUiState.Idle -> {
+            AlarmDetailScreen(viewModel.alarmDetailState, isNameDialogOpened) {
+                when(it) {
+                    AlarmAction.Close -> onClose()
+                    AlarmAction.Dismiss -> isNameDialogOpened = false
+                    AlarmAction.NameClicked -> isNameDialogOpened = true
+                    AlarmAction.Save -> viewModel.save()
+                }
             }
-            else -> viewModel.save()
         }
+        AlarmDetailUiState.Loading -> {
+            Box(
+                Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Loading...")
+            }
+        }
+        AlarmDetailUiState.AlarmSaved -> {
+            onClose()
+        }
+    }
+}
+
+@Composable
+private fun AlarmDetailScreen(
+    alarmDetailState: AlarmDetailState,
+    isNameDialogOpened: Boolean,
+    onAction: (AlarmAction) -> Unit
+) {
+    AlarmDetailScaffold(alarmDetailState, isNameDialogOpened) {
+        onAction(it)
     }
 }
 
