@@ -41,6 +41,9 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+# Snoozeloo
+app/schemas
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,intellij,intellij+all,intellij+iml,kotlin,java,gradle,git
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,intellij,intellij+all,intellij+iml,kotlin,java,gradle,git
 
