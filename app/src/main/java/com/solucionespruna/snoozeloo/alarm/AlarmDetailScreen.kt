@@ -37,7 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AlarmDetailScreen(
-    viewModel: AlarmViewModel = koinViewModel(),
+    viewModel: AlarmDetailViewModel = koinViewModel(),
     onClose: () -> Unit
 ) {
     var isNameDialogOpened by remember {

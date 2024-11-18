@@ -1,6 +1,5 @@
 package com.solucionespruna.snoozeloo.alarm
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,7 +7,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solucionespruna.snoozeloo.alarm.data.AlarmRepository
-import com.solucionespruna.snoozeloo.alarm.data.AlarmRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +15,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-class AlarmViewModel(
+class AlarmDetailViewModel(
     private val alarmRepository: AlarmRepository
 ): ViewModel() {
 
@@ -74,10 +72,10 @@ sealed interface AlarmDetailUiState {
 fun dateFromStringToLong(dateString: String): Long {
     if (dateString.length != 4) throw IllegalArgumentException("Invalid date string")
 
-    val hour = dateString.substring(0, 1).toInt()
-    val min = dateString.substring(2, 3).toInt()
+    val hour = dateString.substring(0, 2).toInt()
+    val min = dateString.substring(2, 4).toInt()
     val date = Calendar.getInstance()
-    date.set(Calendar.HOUR, hour)
+    date.set(Calendar.HOUR_OF_DAY, hour)
     date.set(Calendar.MINUTE, min)
 
     return date.timeInMillis

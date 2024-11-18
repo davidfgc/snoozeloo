@@ -5,7 +5,7 @@ import com.solucionespruna.snoozeloo.database.alarm.AlarmDao
 import com.solucionespruna.snoozeloo.database.alarm.AlarmMapper
 
 interface AlarmRepository {
-    fun getAlarms(): List<com.solucionespruna.snoozeloo.database.alarm.Alarm>
+    fun getAlarms(): List<Alarm>
     suspend fun saveAlarm(alarm: Alarm)
 }
 
@@ -17,8 +17,14 @@ class AlarmRepositoryImpl(
         alarmDao.updateOrInsert(AlarmMapper.toAlarmEntity(alarm))
     }
 
-    override fun getAlarms(): List<com.solucionespruna.snoozeloo.database.alarm.Alarm> {
-        return alarmDao.getAlarms()
+    override fun getAlarms(): List<Alarm> {
+        return alarmDao.getAlarms().map {
+            Alarm(
+                it.name,
+                it.date,
+                enabled = true,
+            )
+        }
     }
 
 }
