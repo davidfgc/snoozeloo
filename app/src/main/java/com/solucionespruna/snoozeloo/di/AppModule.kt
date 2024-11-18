@@ -14,11 +14,14 @@ import org.koin.dsl.module
 
 val appModule = module {
     single {
-        Room.databaseBuilder(
-            androidApplication(),
-            AlarmDatabase::class.java,
-            "ALARM_DATABASE"
-        ).build()
+        Room
+            .databaseBuilder(
+                androidApplication(),
+                AlarmDatabase::class.java,
+                "ALARM_DATABASE",
+            )
+            .fallbackToDestructiveMigration()
+            .build()
     }
     single<AlarmDao> {
         val database = get<AlarmDatabase>()

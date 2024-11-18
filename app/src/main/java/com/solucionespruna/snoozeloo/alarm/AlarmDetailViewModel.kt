@@ -1,5 +1,7 @@
 package com.solucionespruna.snoozeloo.alarm
 
+import android.icu.number.NumberFormatter
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.Calendar
 
 class AlarmDetailViewModel(
@@ -70,13 +74,17 @@ sealed interface AlarmDetailUiState {
 }
 
 fun dateFromStringToLong(dateString: String): Long {
-    if (dateString.length != 4) throw IllegalArgumentException("Invalid date string")
+    val formatter = DecimalFormat("0000")
+    val dateFormatted = formatter.format(dateString.trim().toInt())
 
-    val hour = dateString.substring(0, 2).toInt()
-    val min = dateString.substring(2, 4).toInt()
+    val hour = dateFormatted.substring(0, 2).toInt()
+    val min = dateFormatted.substring(2, 4).toInt()
     val date = Calendar.getInstance()
     date.set(Calendar.HOUR_OF_DAY, hour)
     date.set(Calendar.MINUTE, min)
+
+    if (date.before(Calendar.getInstance()))
+        date.add(Calendar.DAY_OF_MONTH, 1)
 
     return date.timeInMillis
 }

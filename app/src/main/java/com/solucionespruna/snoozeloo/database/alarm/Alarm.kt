@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Alarm(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val date: Long,
     val name: String

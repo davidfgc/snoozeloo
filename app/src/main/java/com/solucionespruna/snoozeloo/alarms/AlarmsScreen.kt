@@ -78,7 +78,10 @@ private fun AlarmsScreen(
 
 @Composable
 fun AlarmsList(alarms: List<Alarm>, modifier: Modifier = Modifier) {
-    Column(Modifier.padding(16.dp)) {
+    Column(
+        modifier = modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         alarms.forEach {
             AlarmItem(it)
         }
