@@ -29,11 +29,11 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.solucionespruna.snoozeloo.R
 import com.solucionespruna.snoozeloo.alarm.Alarm
+import com.solucionespruna.snoozeloo.boundaries.date.SnoozelooDateTime
 import com.solucionespruna.snoozeloo.designsystem.SnoozelooFab
 import com.solucionespruna.snoozeloo.designsystem.SnoozelooScreenTitle
 import com.solucionespruna.snoozeloo.ui.theme.SnoozelooTheme
 import org.koin.androidx.compose.koinViewModel
-import java.util.Calendar
 
 @Composable
 fun AlarmsScreen(
@@ -143,7 +143,7 @@ private fun AlarmsScreenPreview() {
 fun AlarmListPreview(modifier: Modifier = Modifier) {
     val alarm = Alarm(
         name = "Wake Up",
-        date = Calendar.getInstance().timeInMillis + 90 * 60 * 1000,
+        date = SnoozelooDateTime.nowInMillis() + 90 * 60 * 1000,
         enabled = true
     )
     SnoozelooTheme {

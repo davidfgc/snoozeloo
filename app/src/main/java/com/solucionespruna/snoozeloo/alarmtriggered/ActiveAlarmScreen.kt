@@ -24,16 +24,16 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.solucionespruna.snoozeloo.R
 import com.solucionespruna.snoozeloo.alarm.Alarm
+import com.solucionespruna.snoozeloo.boundaries.date.SnoozelooDateTime
 import com.solucionespruna.snoozeloo.designsystem.SnoozelooButton
 import com.solucionespruna.snoozeloo.ui.theme.SnoozelooTheme
-import java.util.Calendar
 import java.util.Locale
 
 @Composable
 fun ActiveAlarmScreen() {
     val alarm = Alarm(
         name = "Work",
-        date = Calendar.getInstance().timeInMillis,
+        date = SnoozelooDateTime.nowInMillis(),
         enabled = true,
     )
     Box(
@@ -51,7 +51,7 @@ fun ActiveAlarmScreen() {
                 Modifier.size(62.dp)
             )
             Text(
-                text = alarm.formatTime(),
+                text = SnoozelooDateTime.formatTime(alarm.date),
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = TextUnit(82f, TextUnitType.Sp),
                 fontWeight = FontWeight.Medium

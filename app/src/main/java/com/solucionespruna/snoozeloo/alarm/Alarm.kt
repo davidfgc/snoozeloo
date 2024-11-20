@@ -1,7 +1,10 @@
 package com.solucionespruna.snoozeloo.alarm
 
+import com.solucionespruna.snoozeloo.boundaries.date.SnoozelooDateTime
+import com.solucionespruna.snoozeloo.boundaries.date.SnoozelooDateTime.nowInMillis
 import java.text.DecimalFormat
-import java.util.Calendar
+import java.time.LocalDateTime
+import java.time.ZoneId
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -11,17 +14,8 @@ data class Alarm(
     val date: Long,
     val enabled: Boolean
 ) {
-    fun formatTime(): String {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = date
-        val formatter = DecimalFormat("00")
-        val hour = formatter.format(calendar.get(Calendar.HOUR_OF_DAY))
-        val min = formatter.format(calendar.get(Calendar.MINUTE))
-        return "${hour}:${min}"
-    }
-
     fun nextOccurrenceText(): String {
-        val millisToNextOccurrence = timeToNextOccurrence()
+        val millisToNextOccurrence = date - nowInMillis()
         return if (millisToNextOccurrence <= 0) ""
         else {
             val minInMillis = 1000f * 60
@@ -36,9 +30,25 @@ data class Alarm(
         }
     }
 
-    private fun timeToNextOccurrence(): Long {
-        val currentMillis = Calendar.getInstance().timeInMillis
-        return date - currentMillis
+    companion object {
+        fun getNextAlarmOccurrenceMillis(dateString: String): Long {
+            val formatter = DecimalFormat("0000")
+            val dateFormatted = formatter.format(dateString.trim().toInt())
+
+            val hour = dateFormatted.substring(0, 2).toInt()
+            val minute = dateFormatted.substring(2, 4).toInt()
+
+            val localDateTime = LocalDateTime.now(ZoneId.systemDefault())
+                .withHour(hour)
+                .withMinute(minute)
+
+            return if (localDateTime.isBefore(LocalDateTime.now()))
+                localDateTime
+                    .withDayOfMonth(localDateTime.dayOfMonth + 1)
+                    .toEpochSecond(SnoozelooDateTime.zoneOffset) * 1000
+            else
+                localDateTime.toEpochSecond(SnoozelooDateTime.zoneOffset) * 1000
+        }
     }
 }
 
