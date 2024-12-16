@@ -99,7 +99,7 @@ private fun AlarmDetailScaffold(
                 endIcon = {
                     SnoozelooButton(
                         text = stringResource(id = R.string.common__save),
-                        enabled = alarmDetailState.isAlarmValid
+                        enabled = alarmDetailState.isTimeValid
                     ) {
                         onAction(AlarmAction.Save)
                     }

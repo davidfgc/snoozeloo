@@ -26,7 +26,7 @@ fun SnoozelooIconButton(vector: ImageVector, modifier: Modifier = Modifier, onCl
         modifier
             .clip(RoundedCornerShape(8.dp))
             .size(32.dp)
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(MaterialTheme.colorScheme.primary)
     ) {
         Icon(
             imageVector = vector,

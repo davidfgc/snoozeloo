@@ -28,22 +28,11 @@ class AlarmDetailViewModel(
 
     init {
         snapshotFlow {
-            alarmDetailState.nameState.text
-        }.onEach {
-            val isNameValid = it.trim().isNotBlank()
-            alarmDetailState = alarmDetailState.copy(
-                isNameValid = isNameValid,
-                isAlarmValid = alarmDetailState.isTimeValid && isNameValid
-            )
-        }.launchIn(viewModelScope)
-
-        snapshotFlow {
             alarmDetailState.timeState.text
         }.onEach {
-            val isTimeValid = it != "0000" && it.isNotBlank()
+            val isTimeValid = it.isNotBlank()
             alarmDetailState = alarmDetailState.copy(
                 isTimeValid = isTimeValid,
-                isAlarmValid = isTimeValid && alarmDetailState.isNameValid
             )
         }.launchIn(viewModelScope)
     }
