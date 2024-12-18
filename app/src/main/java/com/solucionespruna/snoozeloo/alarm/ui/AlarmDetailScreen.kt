@@ -1,4 +1,4 @@
-package com.solucionespruna.snoozeloo.alarm
+package com.solucionespruna.snoozeloo.alarm.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

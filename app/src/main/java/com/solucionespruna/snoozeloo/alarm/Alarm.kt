@@ -41,6 +41,7 @@ data class Alarm(
             val localDateTime = LocalDateTime.now(ZoneId.systemDefault())
                 .withHour(hour)
                 .withMinute(minute)
+                .withSecond(0)
 
             return if (localDateTime.isBefore(LocalDateTime.now()))
                 localDateTime

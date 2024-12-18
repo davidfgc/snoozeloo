@@ -1,7 +1,8 @@
 package com.solucionespruna.snoozeloo.di
 
 import androidx.room.Room
-import com.solucionespruna.snoozeloo.alarm.AlarmDetailViewModel
+import com.solucionespruna.snoozeloo.alarm.SaveAlarmUseCase
+import com.solucionespruna.snoozeloo.alarm.ui.AlarmDetailViewModel
 import com.solucionespruna.snoozeloo.alarms.AlarmsViewModel
 import com.solucionespruna.snoozeloo.alarm.data.AlarmRepository
 import com.solucionespruna.snoozeloo.alarm.data.AlarmRepositoryImpl
@@ -30,6 +31,7 @@ val appModule = module {
     }
     single { AlarmRepositoryImpl(get()) } bind AlarmRepository::class
     single { SnoozelooScheduler(get()) }
+    single { SaveAlarmUseCase(get(), get()) }
 
     viewModelOf(::AlarmDetailViewModel)
     viewModelOf(::AlarmsViewModel)

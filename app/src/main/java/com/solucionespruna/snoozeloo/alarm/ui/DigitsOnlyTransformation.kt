@@ -1,4 +1,4 @@
-package com.solucionespruna.snoozeloo.alarm
+package com.solucionespruna.snoozeloo.alarm.ui
 
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer

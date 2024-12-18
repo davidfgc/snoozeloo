@@ -1,15 +1,14 @@
-package com.solucionespruna.snoozeloo.alarm
+package com.solucionespruna.snoozeloo.alarm.ui
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solucionespruna.snoozeloo.alarm.Alarm
 import com.solucionespruna.snoozeloo.alarm.Alarm.Companion.getNextAlarmOccurrenceMillis
-import com.solucionespruna.snoozeloo.alarm.data.AlarmRepository
-import com.solucionespruna.snoozeloo.alarmtriggered.SnoozelooScheduler
+import com.solucionespruna.snoozeloo.alarm.SaveAlarmUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,8 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class AlarmDetailViewModel(
-    private val alarmRepository: AlarmRepository,
-    private val snoozelooScheduler: SnoozelooScheduler,
+    private val saveAlarmUseCase: SaveAlarmUseCase,
 ): ViewModel() {
 
     private val _alarmDetailUiState = MutableStateFlow<AlarmDetailUiState>(AlarmDetailUiState.Idle)
@@ -48,8 +46,7 @@ class AlarmDetailViewModel(
                 date = getNextAlarmOccurrenceMillis(alarmDetailState.timeState.text.toString()),
                 enabled = true
             )
-            alarmRepository.saveAlarm(alarm)
-            snoozelooScheduler.schedule(alarm)
+            saveAlarmUseCase.execute(alarm)
             _alarmDetailUiState.emit(AlarmDetailUiState.AlarmSaved)
         }
     }

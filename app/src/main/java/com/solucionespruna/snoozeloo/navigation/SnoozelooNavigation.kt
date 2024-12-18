@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.solucionespruna.snoozeloo.alarm.AlarmDetailScreen
+import com.solucionespruna.snoozeloo.alarm.ui.AlarmDetailScreen
 import com.solucionespruna.snoozeloo.alarms.AlarmsScreen
 
 @Composable

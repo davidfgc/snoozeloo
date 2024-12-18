@@ -1,4 +1,4 @@
-package com.solucionespruna.snoozeloo.alarm
+package com.solucionespruna.snoozeloo.alarm.ui
 
 sealed interface AlarmAction {
     data object Close: AlarmAction
