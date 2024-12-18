@@ -5,6 +5,7 @@ import com.solucionespruna.snoozeloo.alarm.AlarmDetailViewModel
 import com.solucionespruna.snoozeloo.alarms.AlarmsViewModel
 import com.solucionespruna.snoozeloo.alarm.data.AlarmRepository
 import com.solucionespruna.snoozeloo.alarm.data.AlarmRepositoryImpl
+import com.solucionespruna.snoozeloo.alarmtriggered.SnoozelooScheduler
 import com.solucionespruna.snoozeloo.database.alarm.AlarmDao
 import com.solucionespruna.snoozeloo.database.alarm.AlarmDatabase
 import org.koin.android.ext.koin.androidApplication
@@ -28,6 +29,7 @@ val appModule = module {
         database.dao
     }
     single { AlarmRepositoryImpl(get()) } bind AlarmRepository::class
+    single { SnoozelooScheduler(get()) }
 
     viewModelOf(::AlarmDetailViewModel)
     viewModelOf(::AlarmsViewModel)
