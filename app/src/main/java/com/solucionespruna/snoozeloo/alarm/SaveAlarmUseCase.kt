@@ -8,10 +8,13 @@ class SaveAlarmUseCase(
     private val snoozelooScheduler: SnoozelooScheduler,
 ) {
     suspend fun execute(alarm: Alarm) {
-        alarmRepository.saveAlarm(alarm)
+        val id = alarmRepository.saveAlarm(alarm)
+        val alarmSaved = alarm.copy(
+            id = id
+        )
         if (alarm.enabled)
-            snoozelooScheduler.schedule(alarm)
+            snoozelooScheduler.schedule(alarmSaved)
         else
-            snoozelooScheduler.cancel(alarm)
+            snoozelooScheduler.cancel(alarmSaved)
     }
 }

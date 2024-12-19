@@ -8,7 +8,7 @@ import androidx.room.Upsert
 interface AlarmDao {
 
     @Upsert
-    suspend fun updateOrInsert(alarm: Alarm)
+    suspend fun updateOrInsert(alarm: Alarm): Long
 
     @Query("SELECT * FROM alarm ORDER BY date ASC")
     fun getAlarms(): List<Alarm>

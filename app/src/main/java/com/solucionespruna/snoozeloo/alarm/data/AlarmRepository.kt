@@ -6,16 +6,15 @@ import com.solucionespruna.snoozeloo.database.alarm.AlarmMapper
 
 interface AlarmRepository {
     fun getAlarms(): List<Alarm>
-    suspend fun saveAlarm(alarm: Alarm)
+    suspend fun saveAlarm(alarm: Alarm): Long
 }
 
 class AlarmRepositoryImpl(
     private val alarmDao: AlarmDao
 ): AlarmRepository {
 
-    override suspend fun saveAlarm(alarm: Alarm) {
+    override suspend fun saveAlarm(alarm: Alarm) =
         alarmDao.updateOrInsert(AlarmMapper.toAlarmEntity(alarm))
-    }
 
     override fun getAlarms(): List<Alarm> {
         return alarmDao.getAlarms().map {

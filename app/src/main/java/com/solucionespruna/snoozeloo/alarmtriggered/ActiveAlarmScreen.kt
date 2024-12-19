@@ -1,5 +1,6 @@
 package com.solucionespruna.snoozeloo.alarmtriggered
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,7 +31,11 @@ import com.solucionespruna.snoozeloo.ui.theme.SnoozelooTheme
 import java.util.Locale
 
 @Composable
-fun ActiveAlarmScreen() {
+fun ActiveAlarmScreen(
+    id: Long,
+    onClose: () -> Unit,
+) {
+    Log.d("DFG", "ActiveAlarmScreen... $id")
     val alarm = Alarm(
         name = "Work",
         date = SnoozelooDateTime.nowInMillis(),
@@ -65,8 +70,9 @@ fun ActiveAlarmScreen() {
                 text = stringResource(R.string.common__turn_off),
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = MaterialTheme.typography.headlineSmall,
-                height = 45.dp
-            ) { }
+                height = 45.dp,
+                onClick = onClose
+            )
         }
     }
 }
@@ -75,6 +81,6 @@ fun ActiveAlarmScreen() {
 @Composable
 private fun ActiveAlarmScreenPreview() {
     SnoozelooTheme {
-        ActiveAlarmScreen()
+        ActiveAlarmScreen(0) {}
     }
 }

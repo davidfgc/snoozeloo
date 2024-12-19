@@ -9,7 +9,7 @@ import kotlin.math.ceil
 import kotlin.math.floor
 
 data class Alarm(
-    val id: Int = 0,
+    val id: Long = 0,
     val name: String,
     val date: Long,
     val enabled: Boolean
