@@ -23,7 +23,9 @@ class SnoozelooScheduler(
         val intent = Intent(
             context,
             AlarmReceiver::class.java
-        )
+        ).apply {
+            putExtra("name", alarm.name)
+        }
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             alarm.date,

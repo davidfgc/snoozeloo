@@ -6,7 +6,10 @@ import android.content.Intent
 import android.util.Log
 
 class AlarmReceiver: BroadcastReceiver() {
-    override fun onReceive(p0: Context?, p1: Intent?) {
-        Log.d("DFG", "onReceive...")
+    override fun onReceive(context: Context?, intent: Intent?) {
+        val name = intent?.let {
+            intent.getStringExtra("name")
+        } ?: "No Name"
+        Log.d("DFG", "onReceive... $name")
     }
 }
